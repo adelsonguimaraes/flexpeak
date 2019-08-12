@@ -1,0 +1,126 @@
+<div class="">
+    <div ng-include="'app/views/common/header.html'"></div>
+    <section ng-if="!novo">
+        <div style="display: flex;">
+            <button class="btn btn-default" ng-click="cadNovo()"><i class="fa fa-plus"></i></button>
+            <button class="btn btn-default" ng-click="relatorio()" title="Relatorio"><i class="fa fa-file-pdf-o"></i></button>
+            <input type="text" class="form-control" ng-model="filtro" placeholder="Filtro">
+            <input type="tel" class="form-control" ng-model="pagination.limit" style="width:50px;" so-numeros>
+            <button class="btn btn-default" ng-click="filtrar()"><i class="fa fa-filter"></i></button>
+            <button class="btn btn-default" ng-click="listarClientes()"><i class="fa fa-refresh"></i></button>
+        </div>
+        
+        <div class="table-responsive">
+            <table class="table table-striped table-bordered">
+                <thead>
+                    <tr>
+                        <td align="left" style="cursor: pointer;" ng-click="ordernar('id')">ID</i></span></td>
+                        <td align="left" style="cursor: pointer;" ng-click="ordernar('curso')">Curso</td>
+                        <td align="left" style="cursor: pointer;" ng-click="ordernar('nome')">Nome</td>
+                        <td align="left" style="cursor: pointer;" ng-click="ordernar('datanascimento')">Data Nascimento</td>
+                        <td align="left" style="cursor: pointer;" ng-click="ordernar('logradouro')">Logradouro</td>
+                        <td align="left" style="cursor: pointer;" ng-click="ordernar('numero')">Numero</td>
+                        <td align="left" style="cursor: pointer;" ng-click="ordernar('bairro')">Bairro</td>
+                        <td align="left" style="cursor: pointer;" ng-click="ordernar('cidade')">Cidade</td>
+                        <td align="left" style="cursor: pointer;" ng-click="ordernar('estado')">Estado</td>
+                        <td align="left" style="cursor: pointer;" ng-click="ordernar('cep')">Cep</td>
+                        <td align="left" style="cursor: pointer;" ng-click="ordernar('datacadastro')">Data Cadastro</td>
+                        <td align="left">Ações</td>
+                    </tr>
+                </thead>
+                <tbody>
+                    <tr ng-repeat="obj in alunos | filter:filtro | orderBy:ordenador:reverse">
+                        <td>{{obj.id}}</td>
+                        <td>{{obj.curso}}</td>
+                        <td>{{obj.nome}}</td>
+                        <td>{{obj.datanascimento | data}}</td>
+                        <td>{{obj.logradouro}}</td>
+                        <td>{{obj.numero}}</td>
+                        <td>{{obj.bairro}}</td>
+                        <td>{{obj.cidade}}</td>
+                        <td>{{obj.estado}}</td>
+                        <td>{{obj.cep}}</td>
+                        <td>{{obj.datacadastro | data}}</td>
+                        <td>
+                            <button class="btn btn-warning" ng-click="editar(obj)"><i class="fa fa-pencil"></i></button>
+                            <button class="btn btn-danger"  ng-click="deletar(obj)"><i class="fa fa-trash"></i></button>
+                        </td>
+                    </tr>
+                </tbody>
+            </table>
+        </div>
+    </section>
+    <section style="padding:10px;margin-bottom:50px;" ng-if="novo">
+        <!-- <h3 align="center">Novo Cadastro</h3> -->
+        <div class="row">
+            <div class="col-md-12">
+                <form class="form" name="formCad">
+                    <h4>Curso</h4>
+                    <hr>
+                    <div class="row">
+                        <div class="col-sm-12">
+                            <label>Selecione o curso do aluno <span class="importante">*</span></label>
+                            <select class="form-control" name="idcurso" id="idcurso" ng-model="obj.idcurso" ng-options="obj.id as obj.nome for obj in cursos"></select>
+                        </div>
+                    </div>
+                    <h4>Dados Pessoais</h4>
+                    <hr>
+                    <div class="row">
+                        <div class="col-sm-6">
+                            <label>Nome <span class="importante">*</span></label>
+                            <input type="text" class="form-control"  name="nome" id="nome" ng-model="obj.nome" placeholder="Qual o nome do aluno?" ng-required="true">
+                        </div>
+                        <div class="col-sm-6">
+                            <label>Data Nascimento <span class="importante">*</span></label>
+                            <input type="date" class="form-control" name="datanascimento" id="datanascimento" ng-model="obj.datanascimento" placeholder="Qual a data nascimento?"
+                                ng-required="true">
+                        </div>
+                    </div>
+                    <h4>Endereço</h4>
+                    <hr>
+                    <div class="row">
+                        <div class="form-group">
+                            <div class="col-sm-4">
+                                <label>CEP <span class="importante">*</span></label>
+                                <input type="tel" class="form-control" name="cep" id="cep" ng-model="obj.cep"
+                                    placeholder="Qual o CEP?" ng-required="true" ng-blur="consultaCep(obj)">
+                            </div>
+                            <div class="col-sm-6">
+                                <label>Logradouro <span class="importante">*</span></label>
+                                <input type="text" class="form-control" name="logradouro" id="logradouro" ng-model="obj.logradouro" placeholder="Qual o Logradouro?"
+                                    ng-required="true">
+                            </div>
+                            <div class="col-sm-2">
+                                <label>Número <span class="importante">*</span></label>
+                                <input type="tel" class="form-control" name="numero" id="numero" ng-model="obj.numero"
+                                    placeholder="Qual o Número?" ng-required="true">
+                            </div>
+                        </div>
+                        <div class="form-group">
+                            <div class="col-sm-4">
+                                <label>Bairro <span class="importante">*</span></label>
+                                <input type="text" class="form-control" name="bairro" id="bairro" ng-model="obj.bairro"
+                                    placeholder="Qual o Número?" ng-required="true">
+                            </div>
+                            <div class="col-sm-6">
+                                <label>Cidade <span class="importante">*</span></label>
+                                <input type="text" class="form-control" name="cidade" id="cidade" ng-model="obj.cidade" placeholder="Qual a cidade?"
+                                    ng-required="true">
+                            </div>
+                            <div class="col-sm-2">
+                                <label>Estado <span class="importante">*</span></label>
+                                <input type="text" class="form-control" name="estado" id="estado" ng-model="obj.estado" placeholder="Qual o estado?"
+                                    ng-required="true">
+                            </div>
+                        </div>
+                    </div>
+                </form>
+            </div>    
+        </div>
+        <br>
+        <div class="btn-group pull-right">
+            <button class="btn btn-danger" ng-click="cancelaNovo()">Cancelar</button>
+            <button class="btn btn-success" ng-click="salvarNovo(obj)" ng-disabled="formCad.$invalid">Salvar</button>
+        </div>
+    </section>
+</div>
